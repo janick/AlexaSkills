@@ -18,7 +18,7 @@ class Response:
         self.rsp['outputSpeech'] = {'type': 'SSML',
                                     'ssml':  "<speak>" + say + "</speak>"}
         self.rsp['card'] = {'type': 'Simple',
-                            'title': "PortlandMaps - " + title,
+                            'title': "MySkill - " + title,
                             'content': say}
         self.rsp['shouldEndSession'] = True
 
@@ -46,8 +46,22 @@ class EventHandler:
 
 
     def my_intent(self):
+        url ="https://www.somesite.com/api/"
+        args = {"query"  : value,
+                "field"  : value,
+                "api_key": "SECRET-KEY"}
+
+        r = requests.get(url, params=args)
+
+        if r.status_code != 200:
+            return False;
+
+        rsp = r.json()
+        if 'field' not in rsp:
+            return False
+
         self.response = Response("My Intent",
-                                 "This is my intent response")
+                                 "Here you go " + rsp['field'])
 
         return True
 
